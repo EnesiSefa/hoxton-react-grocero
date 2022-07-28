@@ -1,107 +1,59 @@
 import { useState } from "react";
+import { Header } from "./components/Header";
+import { Cart } from "./components/Cart";
+import initialStoreItems, { StoreItem } from "./data/Storeitems";
 
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [storeItems, setStoreItems] = useState(initialStoreItems);
+
+  const storeItemsCopy = structuredClone(storeItems);
+
+  function getItemImagePath(item: StoreItem) {
+    let id = String(item.id).padStart(3, "0");
+    return `assets/icons/${id}-${item.name}.svg`;
+  }
+
+  // function getCartItems() {
+  //   return storeItems.filter((item: StoreItem) => item.inCart > 0);
+  // }
+
+  // output: the current total
+  function getTotal() {
+    return storeItems.map((item: StoreItem) => item.price * item.inCart);
+  }
+
+  function increaseQuantity(item: StoreItem) {
+    if (item.stock === 0) return;
+
+    item.inCart++;
+    item.stock--;
+    setStoreItems(storeItemsCopy);
+  }
+
+  function decreaseQuantity(item: StoreItem) {
+    if (item.inCart > 0) {
+      item.inCart--;
+      item.stock++;
+      setStoreItems(storeItemsCopy);
+    }
+  }
 
   return (
-    <div className="App">
-      <header id="store">
-        <h1>Grocero</h1>
-        <ul className="item-list store--item-list">
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/001-beetroot.svg" alt="beetroot" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/002-carrot.svg" alt="carrot" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/003-apple.svg" alt="apple" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/004-apricot.svg" alt="apricot" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/005-avocado.svg" alt="avocado" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/006-bananas.svg" alt="bananas" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/007-bell-pepper.svg" alt="bell-pepper" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/008-berry.svg" alt="berry" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/009-blueberry.svg" alt="blueberry" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-          <li>
-            <div className="store--item-icon">
-              <img src="assets/icons/010-eggplant.svg" alt="eggplant" />
-            </div>
-            <button>Add to cart</button>
-          </li>
-        </ul>
-      </header>
-
-      <main id="cart">
-        <h2>Your Cart</h2>
-
-        <div className="cart--item-list-container">
-          <ul className="item-list cart--item-list">
-            <li>
-              <img
-                className="cart--item-icon"
-                src="assets/icons/010-eggplant.svg"
-                alt="eggplant"
-              />
-              <p>eggplant</p>
-              <button className="quantity-btn remove-btn center">-</button>
-              <span className="quantity-text center">0</span>
-              <button className="quantity-btn add-btn center">+</button>
-            </li>
-          </ul>
-        </div>
-
-        <div className="total-section">
-          <div>
-            <h3>Total</h3>
-          </div>
-
-          <div>
-            <span className="total-number">£0.00</span>
-          </div>
-        </div>
-      </main>
+    <div>
+      <Header
+        storeItemsCopy={storeItemsCopy}
+        getItemImagePath={getItemImagePath}
+        increaseQuantity={increaseQuantity}
+      />
+      <Cart
+        storeItemsCopy={storeItemsCopy}
+        getItemImagePath={getItemImagePath}
+        increaseQuantity={increaseQuantity}
+        decreaseQuantity={decreaseQuantity}
+        getTotal={getTotal}
+      />
     </div>
   );
 }
