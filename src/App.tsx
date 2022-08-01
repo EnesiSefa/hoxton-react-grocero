@@ -15,11 +15,11 @@ function App() {
     return `assets/icons/${id}-${item.name}.svg`;
   }
 
-  // function getCartItems() {
-  //   return storeItems.filter((item: StoreItem) => item.inCart > 0);
-  // }
+  function getCartItems() {
+    return storeItems.filter((item: StoreItem) => item.inCart > 0);
+  }
 
-  // output: the current total
+  
   function getTotal() {
     return storeItems.map((item: StoreItem) => item.price * item.inCart);
   }

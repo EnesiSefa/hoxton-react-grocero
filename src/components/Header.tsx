@@ -16,6 +16,7 @@ export function Header({
             storeItem={storeItem}
             getItemImagePath={getItemImagePath}
             increaseQuantity={increaseQuantity}
+            storeItemsCopy={storeItemsCopy}
           />
         ))}
       </ul>
